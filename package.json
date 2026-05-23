@@ -8,7 +8,12 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "build": "expo export --platform web",
+    "build:web": "expo export --platform web",
+    "build:android": "eas build --platform android",
+    "build:ios": "eas build --platform ios",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@dotlottie/react-player": "^1.6.19",
