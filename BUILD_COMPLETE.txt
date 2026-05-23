@@ -221,4 +221,5 @@ Start developing:
   cd time-out
   npm start
 
-Happy coding! 🌙✨
+Happy coding!
+Pat Gonzaga @2026 🌙✨
