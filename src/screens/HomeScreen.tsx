@@ -104,7 +104,8 @@ export default function HomeScreen() {
     <SafeAreaView style={[styles.safeArea, { backgroundColor: isNebula ? '#050508' : '#040300' }]}>
       {/* Dynamic Visual CSS imports on Web */}
       {Platform.OS === 'web' && (
-        <style dangerouslySetInnerHTML={{ __html: `
+        <style dangerouslySetInnerHTML={{
+          __html: `
           @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:ital,wght@1,300&family=Rajdhani:wght@700&family=Space+Grotesk:wght@300;400;600&display=swap');
           
           body {
@@ -162,10 +163,10 @@ export default function HomeScreen() {
       )}
 
       {/* Floating Theme Toggle Switch */}
-      <Pressable 
-        onPress={toggleTheme} 
+      <Pressable
+        onPress={toggleTheme}
         style={[
-          styles.themeToggle, 
+          styles.themeToggle,
           { borderColor: isNebula ? 'rgba(140,80,255,0.4)' : 'rgba(218,165,32,0.45)' }
         ]}
       >
@@ -180,16 +181,16 @@ export default function HomeScreen() {
       <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
         {/* Intro Branding Header */}
         <Animated.View entering={FadeInDown.duration(600)} style={styles.intro}>
-          <Text 
+          <Text
             // @ts-ignore
-            className="title-text-web" 
+            className="title-text-web"
             style={[styles.subTitle, isNebula ? styles.subTitleNebula : styles.subTitleGolden]}
           >
             Time Out
           </Text>
-          <Text 
+          <Text
             // @ts-ignore
-            className="desc-text-web" 
+            className="desc-text-web"
             style={[styles.description, isNebula ? styles.descNebula : styles.descGolden]}
           >
             A tiny calming ritual with a magical fortune reveal.
@@ -197,16 +198,16 @@ export default function HomeScreen() {
         </Animated.View>
 
         {/* Categories Selector Tab Bar (Bulletproof React Native style hierarchy) */}
-        <Animated.View 
-          entering={FadeInDown.duration(600).delay(150)} 
+        <Animated.View
+          entering={FadeInDown.duration(600).delay(150)}
           style={[
-            styles.selectorContainer, 
+            styles.selectorContainer,
             isNebula ? styles.selectorContainerNebula : styles.selectorContainerGolden
           ]}
         >
           {categories.map((cat) => {
             const active = quoteSource === cat.id;
-            
+
             // Dynamic themed style assignments
             const tabStyle = isNebula ? styles.tabNebula : styles.tabGolden;
             const activeStyle = isNebula ? styles.tabActiveNebula : styles.tabActiveGolden;
@@ -234,10 +235,10 @@ export default function HomeScreen() {
                 {(isNebula || Platform.OS !== 'web') && (
                   <Text style={styles.selectorIcon}>{cat.icon}</Text>
                 )}
-                
+
                 <Text style={[
-                  styles.selectorLabel, 
-                  labelStyle, 
+                  styles.selectorLabel,
+                  labelStyle,
                   active && activeLabelStyle
                 ]}>
                   {cat.label}
@@ -249,16 +250,16 @@ export default function HomeScreen() {
 
         {/* Interactive centerpiece section */}
         <View style={styles.orbSection}>
-          <OrbButton 
-            onPress={handlePull} 
-            isPulling={pulling} 
-            glowColor={rarityDef.glow} 
+          <OrbButton
+            onPress={handlePull}
+            isPulling={pulling}
+            glowColor={rarityDef.glow}
             theme={theme}
           />
-          
+
           <Text style={[styles.hint, isNebula ? styles.hintNebula : styles.hintGolden]}>
-            {Platform.OS === 'web' 
-              ? `Click the ${isNebula ? 'orb' : 'coin'} for your fortune` 
+            {Platform.OS === 'web'
+              ? `Click the ${isNebula ? 'orb' : 'coin'} for your fortune`
               : `Shake or tap the ${isNebula ? 'orb' : 'coin'} for your fortune`}
           </Text>
         </View>
@@ -273,11 +274,11 @@ export default function HomeScreen() {
               </Text>
             </View>
           ) : null}
-          <FortuneCookieReveal 
-            quote={quote} 
-            rarity={rarity} 
-            glowColor={rarityDef.glow} 
-            open={cookieOpen} 
+          <FortuneCookieReveal
+            quote={quote}
+            rarity={rarity}
+            glowColor={rarityDef.glow}
+            open={cookieOpen}
             theme={theme}
           />
           {error ? <Text style={styles.errorText}>{error}</Text> : null}
@@ -286,7 +287,161 @@ export default function HomeScreen() {
         {/* App store downloads footer */}
         {Platform.OS === 'web' ? (
           <View style={styles.footer}>
-            {/* LottieView removed on web — lottie-react-native is native-only */}
+            {/* Premium CSS-injected button styles for web */}
+            <style dangerouslySetInnerHTML={{ __html: `
+              .dl-btn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                width: 100%;
+                padding: 15px 20px;
+                border-radius: 50px;
+                border: none;
+                cursor: pointer;
+                font-size: 14px;
+                font-weight: 700;
+                font-family: 'Space Grotesk', sans-serif;
+                letter-spacing: 0.5px;
+                position: relative;
+                overflow: hidden;
+                transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+                text-decoration: none;
+                -webkit-font-smoothing: antialiased;
+              }
+              .dl-btn::before {
+                content: '';
+                position: absolute;
+                top: 0; left: 0; right: 0;
+                height: 50%;
+                background: rgba(255,255,255,0.12);
+                border-radius: 50px 50px 0 0;
+                pointer-events: none;
+              }
+              .dl-btn:hover {
+                transform: translateY(-2px);
+                filter: brightness(1.12);
+              }
+              .dl-btn:active {
+                transform: translateY(0px) scale(0.97);
+              }
+              .dl-btn-android-nebula {
+                background: linear-gradient(135deg, #6d28d9 0%, #8c50ff 60%, #a855f7 100%);
+                box-shadow: 0 4px 20px rgba(140, 80, 255, 0.45), inset 0 1px 0 rgba(255,255,255,0.18);
+                color: #ffffff;
+              }
+              .dl-btn-android-nebula:hover {
+                box-shadow: 0 8px 30px rgba(140, 80, 255, 0.6), inset 0 1px 0 rgba(255,255,255,0.22);
+              }
+              .dl-btn-android-golden {
+                background: linear-gradient(135deg, #92610a 0%, #daa520 55%, #ffd700 100%);
+                box-shadow: 0 4px 20px rgba(218, 165, 32, 0.45), inset 0 1px 0 rgba(255,255,255,0.22);
+                color: #1a0c00;
+              }
+              .dl-btn-android-golden:hover {
+                box-shadow: 0 8px 30px rgba(218, 165, 32, 0.6), inset 0 1px 0 rgba(255,255,255,0.28);
+              }
+              .dl-btn-ios-nebula {
+                background: linear-gradient(135deg, rgba(140,80,255,0.08) 0%, rgba(192,132,252,0.14) 100%);
+                box-shadow: 0 2px 12px rgba(140, 80, 255, 0.15), inset 0 1px 0 rgba(255,255,255,0.08);
+                border: 1.5px solid rgba(192,132,252,0.35) !important;
+                color: #d8b4fe;
+              }
+              .dl-btn-ios-nebula:hover {
+                background: linear-gradient(135deg, rgba(140,80,255,0.15) 0%, rgba(192,132,252,0.22) 100%);
+                box-shadow: 0 6px 20px rgba(140, 80, 255, 0.3);
+              }
+              .dl-btn-ios-golden {
+                background: linear-gradient(135deg, rgba(218,165,32,0.07) 0%, rgba(255,215,0,0.12) 100%);
+                box-shadow: 0 2px 12px rgba(218, 165, 32, 0.12), inset 0 1px 0 rgba(255,255,255,0.06);
+                border: 1.5px solid rgba(218,165,32,0.35) !important;
+                color: #ffd700;
+              }
+              .dl-btn-ios-golden:hover {
+                background: linear-gradient(135deg, rgba(218,165,32,0.14) 0%, rgba(255,215,0,0.2) 100%);
+                box-shadow: 0 6px 20px rgba(218, 165, 32, 0.28);
+              }
+              .ios-guide-card {
+                width: 100%;
+                margin-top: 18px;
+                border-radius: 20px;
+                border: 1px solid;
+                padding: 20px;
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
+              }
+              .ios-guide-card-nebula {
+                background: linear-gradient(145deg, rgba(20, 8, 40, 0.9) 0%, rgba(35, 14, 62, 0.85) 100%);
+                border-color: rgba(140, 80, 255, 0.3);
+                box-shadow: 0 8px 32px rgba(140, 80, 255, 0.12), inset 0 1px 0 rgba(192,132,252,0.1);
+              }
+              .ios-guide-card-golden {
+                background: linear-gradient(145deg, rgba(20, 12, 0, 0.9) 0%, rgba(35, 22, 0, 0.85) 100%);
+                border-color: rgba(218, 165, 32, 0.3);
+                box-shadow: 0 8px 32px rgba(218, 165, 32, 0.1), inset 0 1px 0 rgba(255,215,0,0.08);
+              }
+              .ios-guide-title {
+                font-family: 'Rajdhani', sans-serif;
+                font-size: 16px;
+                font-weight: 700;
+                letter-spacing: 0.5px;
+                margin-bottom: 16px;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+              }
+              .ios-step {
+                display: flex;
+                align-items: flex-start;
+                gap: 12px;
+                margin-bottom: 12px;
+              }
+              .ios-step-num {
+                font-family: 'Rajdhani', sans-serif;
+                font-size: 11px;
+                font-weight: 700;
+                letter-spacing: 1px;
+                width: 22px;
+                height: 22px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+                margin-top: 1px;
+              }
+              .ios-step-num-nebula {
+                background: rgba(140, 80, 255, 0.25);
+                color: #c084fc;
+                border: 1px solid rgba(140, 80, 255, 0.4);
+              }
+              .ios-step-num-golden {
+                background: rgba(218, 165, 32, 0.2);
+                color: #ffd700;
+                border: 1px solid rgba(218, 165, 32, 0.4);
+              }
+              .ios-step-text {
+                font-family: 'Space Grotesk', sans-serif;
+                font-size: 14px;
+                line-height: 1.5;
+                flex: 1;
+              }
+              .ios-step-text-nebula { color: #e2d4f8; }
+              .ios-step-text-golden { color: #f5e4a0; }
+              .ios-step-text b { font-weight: 700; }
+              .ios-guide-desc {
+                font-family: 'Space Grotesk', sans-serif;
+                font-size: 12px;
+                line-height: 1.5;
+                margin-top: 8px;
+                padding-top: 12px;
+                border-top: 1px solid;
+                font-style: italic;
+              }
+              .ios-guide-desc-nebula { color: #a78bc4; border-color: rgba(140,80,255,0.15); }
+              .ios-guide-desc-golden { color: #c8a84b; border-color: rgba(218,165,32,0.15); }
+            ` }} />
+
             <Text style={[
               styles.footerGlyph,
               { color: isNebula ? '#8c50ff' : '#ffd700' }
@@ -296,79 +451,91 @@ export default function HomeScreen() {
             <Text style={[styles.footerText, { color: isNebula ? '#7c6a99' : '#7a6020' }]}>
               Install the mobile app to shake for your fortune!
             </Text>
-            
+
             <View style={styles.storeButtons}>
-              <Pressable 
-                onPress={() => Linking.openURL('https://expo.dev/accounts/patrickgonzaga/projects/time-out/builds')}
-                style={[
-                  styles.storeButton, 
-                  styles.storeFill, 
-                  { 
-                    backgroundColor: isNebula ? 'rgba(140, 80, 255, 0.12)' : 'rgba(218, 165, 32, 0.12)',
-                    borderColor: isNebula ? '#8c50ff' : '#ffd700',
-                    borderWidth: 1.5,
-                    shadowColor: isNebula ? '#8c50ff' : '#ffd700',
-                    shadowOpacity: 0.25,
-                    shadowRadius: 8,
-                    shadowOffset: { width: 0, height: 2 }
-                  }
-                ]}
-              > 
-                <Text style={[styles.storeButtonText, { color: isNebula ? '#ffffff' : '#ffd700' }]}>
-                  🤖 Download Android APK
-                </Text>
-              </Pressable>
-              
-              <Pressable 
-                onPress={() => setShowIosGuide(prev => !prev)}
-                style={[
-                  styles.storeButton, 
-                  styles.storeOutline, 
-                  { 
-                    borderColor: isNebula ? 'rgba(255,255,255,0.08)' : 'rgba(218,165,32,0.12)',
-                    backgroundColor: showIosGuide ? (isNebula ? 'rgba(140, 80, 255, 0.08)' : 'rgba(218, 165, 32, 0.08)') : 'rgba(255,255,255,0.02)'
-                  }
-                ]}
-              > 
-                <Text style={[styles.storeButtonText, { color: isNebula ? '#c084fc' : '#ffd700' }]}>
-                  🍏 Install on iOS
-                </Text>
-              </Pressable>
+              {/* Android APK — glossy gradient pill button */}
+              <View style={styles.storeButtonWrap}>
+                <button
+                  // @ts-ignore
+                  className={`dl-btn ${isNebula ? 'dl-btn-android-nebula' : 'dl-btn-android-golden'}`}
+                  onClick={() => Linking.openURL('https://expo.dev/accounts/pgon/projects/time-out/builds')}
+                >
+                  <span>🤖</span>
+                  <span>Download Android APK</span>
+                </button>
+              </View>
+
+              {/* iOS PWA — subtle glass pill button */}
+              <View style={styles.storeButtonWrap}>
+                <button
+                  // @ts-ignore
+                  className={`dl-btn ${isNebula ? 'dl-btn-ios-nebula' : 'dl-btn-ios-golden'}`}
+                  onClick={() => setShowIosGuide(prev => !prev)}
+                >
+                  <span>🍏</span>
+                  <span>Install on iPhone</span>
+                </button>
+              </View>
             </View>
 
             {/* iOS PWA Installation Guide card */}
             {showIosGuide && (
-              <Animated.View 
-                entering={FadeInDown.duration(400)} 
-                style={[
-                  styles.iosGuideCard, 
-                  { 
-                    borderColor: isNebula ? 'rgba(140, 80, 255, 0.2)' : 'rgba(218, 165, 32, 0.25)',
-                    backgroundColor: isNebula ? 'rgba(12, 6, 22, 0.6)' : 'rgba(12, 9, 3, 0.6)'
-                  }
-                ]}
+              <Animated.View
+                entering={FadeInDown.duration(400)}
+                // @ts-ignore
+                className={`ios-guide-card ${isNebula ? 'ios-guide-card-nebula' : 'ios-guide-card-golden'}`}
+                style={styles.iosGuideCardBase}
               >
-                <Text style={[styles.iosGuideTitle, { color: isNebula ? '#c084fc' : '#ffd700' }]}>
+                {/* Title */}
+                {/* @ts-ignore */}
+                <div className={`ios-guide-title ${isNebula ? 'ios-step-text-nebula' : 'ios-step-text-golden'}`}>
                   Install on iPhone / iPad 📱
-                </Text>
-                <Text style={[styles.iosGuideStep, { color: isNebula ? '#d8b4fe' : '#fef08a' }]}>
-                  1. Open this website in <Text style={{ fontWeight: '700' }}>Safari</Text>.
-                </Text>
-                <Text style={[styles.iosGuideStep, { color: isNebula ? '#d8b4fe' : '#fef08a' }]}>
-                  2. Tap the <Text style={{ fontWeight: '700' }}>Share</Text> button at the bottom of the screen.
-                </Text>
-                <Text style={[styles.iosGuideStep, { color: isNebula ? '#d8b4fe' : '#fef08a' }]}>
-                  3. Select <Text style={{ fontWeight: '700' }}>"Add to Home Screen"</Text> from the menu.
-                </Text>
-                <Text style={[styles.iosGuideDesc, { color: isNebula ? '#7c6a99' : '#7a6020' }]}>
-                  This adds a shortcut to your home screen that opens the app in premium full-screen mode!
-                </Text>
+                </div>
+
+                {/* Step 1 */}
+                {/* @ts-ignore */}
+                <div className="ios-step">
+                  {/* @ts-ignore */}
+                  <div className={`ios-step-num ${isNebula ? 'ios-step-num-nebula' : 'ios-step-num-golden'}`}>1</div>
+                  {/* @ts-ignore */}
+                  <div className={`ios-step-text ${isNebula ? 'ios-step-text-nebula' : 'ios-step-text-golden'}`}>
+                    Open this website in <b>Safari</b> (not Chrome)
+                  </div>
+                </div>
+
+                {/* Step 2 */}
+                {/* @ts-ignore */}
+                <div className="ios-step">
+                  {/* @ts-ignore */}
+                  <div className={`ios-step-num ${isNebula ? 'ios-step-num-nebula' : 'ios-step-num-golden'}`}>2</div>
+                  {/* @ts-ignore */}
+                  <div className={`ios-step-text ${isNebula ? 'ios-step-text-nebula' : 'ios-step-text-golden'}`}>
+                    Tap the <b>Share ↑</b> button at the bottom of Safari
+                  </div>
+                </div>
+
+                {/* Step 3 */}
+                {/* @ts-ignore */}
+                <div className="ios-step">
+                  {/* @ts-ignore */}
+                  <div className={`ios-step-num ${isNebula ? 'ios-step-num-nebula' : 'ios-step-num-golden'}`}>3</div>
+                  {/* @ts-ignore */}
+                  <div className={`ios-step-text ${isNebula ? 'ios-step-text-nebula' : 'ios-step-text-golden'}`}>
+                    Scroll down and tap <b>"Add to Home Screen"</b>
+                  </div>
+                </div>
+
+                {/* Footer note */}
+                {/* @ts-ignore */}
+                <div className={`ios-guide-desc ${isNebula ? 'ios-guide-desc-nebula' : 'ios-guide-desc-golden'}`}>
+                  ✨ The app opens in full-screen with no browser bar — just like a native app!
+                </div>
               </Animated.View>
             )}
           </View>
         ) : null}
       </ScrollView>
-      
+
       <PullAnimationOverlay active={pulling} color={rarityDef.glow} />
     </SafeAreaView>
   );
@@ -567,56 +734,62 @@ const styles = StyleSheet.create({
     marginTop: 18,
     width: '100%',
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    gap: 10
+  },
+  storeButtonWrap: {
+    flex: 1
   },
   storeButton: {
     flex: 1,
     marginHorizontal: 6,
     paddingVertical: 14,
-    borderRadius: 16,
+    borderRadius: 50,
     alignItems: 'center',
     justifyContent: 'center'
   },
-  storeFill: {
-    // handled dynamically
-  },
+  storeFill: {},
   storeOutline: {
     borderWidth: 1
   },
   storeButtonText: {
     color: '#fff',
-    fontWeight: '700'
+    fontWeight: '700',
+    fontSize: 13
+  },
+  iosGuideCardBase: {
+    width: '100%',
+    marginTop: 18
   },
   iosGuideCard: {
     marginTop: 16,
     width: '100%',
     maxWidth: 360,
-    borderRadius: 16,
+    borderRadius: 20,
     borderWidth: 1,
-    padding: 16,
+    padding: 20,
     alignItems: 'flex-start',
     shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    shadowOffset: { width: 0, height: 4 }
+    shadowOpacity: 0.12,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 6 }
   },
   iosGuideTitle: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: '700',
-    marginBottom: 8,
+    marginBottom: 12,
     fontFamily: Platform.OS === 'web' ? 'Rajdhani' : 'System'
   },
   iosGuideStep: {
-    fontSize: 12,
-    marginBottom: 4,
-    lineHeight: 1.5,
+    fontSize: 14,
+    marginBottom: 10,
+    lineHeight: 22,
     fontFamily: Platform.OS === 'web' ? 'Space Grotesk' : 'System'
   },
   iosGuideDesc: {
-    fontSize: 11,
-    marginTop: 8,
+    fontSize: 12,
+    marginTop: 10,
     fontStyle: 'italic',
-    lineHeight: 1.4,
+    lineHeight: 18,
     fontFamily: Platform.OS === 'web' ? 'Space Grotesk' : 'System'
   }
 });
