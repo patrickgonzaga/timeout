@@ -286,14 +286,20 @@ export default function HomeScreen() {
         {/* App store downloads footer */}
         {Platform.OS === 'web' ? (
           <View style={styles.footer}>
-            <LottieView source={GlowAnimation} autoPlay loop style={styles.lottie} />
+            {/* LottieView removed on web — lottie-react-native is native-only */}
+            <Text style={[
+              styles.footerGlyph,
+              { color: isNebula ? '#8c50ff' : '#ffd700' }
+            ]}>
+              {isNebula ? '✦' : '☀'}
+            </Text>
             <Text style={[styles.footerText, { color: isNebula ? '#7c6a99' : '#7a6020' }]}>
               Install the mobile app to shake for your fortune!
             </Text>
             
             <View style={styles.storeButtons}>
               <Pressable 
-                onPress={() => Linking.openURL('/time-out.apk')}
+                onPress={() => Linking.openURL('https://expo.dev/accounts/patrickgonzaga/projects/time-out/builds')}
                 style={[
                   styles.storeButton, 
                   styles.storeFill, 
@@ -543,6 +549,12 @@ const styles = StyleSheet.create({
   lottie: {
     width: 150,
     height: 150
+  },
+  footerGlyph: {
+    fontSize: 48,
+    marginBottom: 12,
+    textAlign: 'center',
+    opacity: 0.85
   },
   footerText: {
     textAlign: 'center',
