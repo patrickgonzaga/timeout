@@ -11,7 +11,11 @@
       "resizeMode": "contain",
       "backgroundColor": "#050508"
     },
-    "platforms": ["ios", "android", "web"],
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
@@ -27,6 +31,14 @@
       "favicon": "./assets/favicon.png",
       "bundler": "metro"
     },
-    "assetBundlePatterns": ["**/*"]
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "10a21740-1495-4e2b-bc7e-54d9aaa19127"
+      }
+    },
+    "owner": "pgon"
   }
 }

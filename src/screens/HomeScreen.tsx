@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { palette } from '../constants/colors';
-import { Platform, StyleSheet, Text, View, Pressable, ActivityIndicator, ScrollView } from 'react-native';
+import { Platform, StyleSheet, Text, View, Pressable, ActivityIndicator, ScrollView, Linking } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import LottieView from 'lottie-react-native';
@@ -32,6 +32,7 @@ export default function HomeScreen() {
   const [pulling, setPulling] = useState(false);
   const [cookieOpen, setCookieOpen] = useState(true); // show welcome card immediately
   const [error, setError] = useState<string | null>(null);
+  const [showIosGuide, setShowIosGuide] = useState(false);
 
   const rarityDef = useMemo(() => getRarityDefinition(rarity), [rarity]);
   const isNebula = theme === 'nebula';
@@ -283,20 +284,83 @@ export default function HomeScreen() {
         </Animated.View>
 
         {/* App store downloads footer */}
-        <View style={styles.footer}>
-          <LottieView source={GlowAnimation} autoPlay loop style={styles.lottie} />
-          <Text style={[styles.footerText, { color: isNebula ? '#7c6a99' : '#7a6020' }]}>
-            Download the mobile app for the full experience.
-          </Text>
-          <View style={styles.storeButtons}>
-            <Pressable style={[styles.storeButton, styles.storeFill, { backgroundColor: isNebula ? 'rgba(255,255,255,0.04)' : 'rgba(218,165,32,0.04)' }]}> 
-              <Text style={styles.storeButtonText}>App Store</Text>
-            </Pressable>
-            <Pressable style={[styles.storeButton, styles.storeOutline, { borderColor: isNebula ? 'rgba(255,255,255,0.08)' : 'rgba(218,165,32,0.12)' }]}> 
-              <Text style={styles.storeButtonText}>Google Play</Text>
-            </Pressable>
+        {Platform.OS === 'web' ? (
+          <View style={styles.footer}>
+            <LottieView source={GlowAnimation} autoPlay loop style={styles.lottie} />
+            <Text style={[styles.footerText, { color: isNebula ? '#7c6a99' : '#7a6020' }]}>
+              Install the mobile app to shake for your fortune!
+            </Text>
+            
+            <View style={styles.storeButtons}>
+              <Pressable 
+                onPress={() => Linking.openURL('/time-out.apk')}
+                style={[
+                  styles.storeButton, 
+                  styles.storeFill, 
+                  { 
+                    backgroundColor: isNebula ? 'rgba(140, 80, 255, 0.12)' : 'rgba(218, 165, 32, 0.12)',
+                    borderColor: isNebula ? '#8c50ff' : '#ffd700',
+                    borderWidth: 1.5,
+                    shadowColor: isNebula ? '#8c50ff' : '#ffd700',
+                    shadowOpacity: 0.25,
+                    shadowRadius: 8,
+                    shadowOffset: { width: 0, height: 2 }
+                  }
+                ]}
+              > 
+                <Text style={[styles.storeButtonText, { color: isNebula ? '#ffffff' : '#ffd700' }]}>
+                  🤖 Download Android APK
+                </Text>
+              </Pressable>
+              
+              <Pressable 
+                onPress={() => setShowIosGuide(prev => !prev)}
+                style={[
+                  styles.storeButton, 
+                  styles.storeOutline, 
+                  { 
+                    borderColor: isNebula ? 'rgba(255,255,255,0.08)' : 'rgba(218,165,32,0.12)',
+                    backgroundColor: showIosGuide ? (isNebula ? 'rgba(140, 80, 255, 0.08)' : 'rgba(218, 165, 32, 0.08)') : 'rgba(255,255,255,0.02)'
+                  }
+                ]}
+              > 
+                <Text style={[styles.storeButtonText, { color: isNebula ? '#c084fc' : '#ffd700' }]}>
+                  🍏 Install on iOS
+                </Text>
+              </Pressable>
+            </View>
+
+            {/* iOS PWA Installation Guide card */}
+            {showIosGuide && (
+              <Animated.View 
+                entering={FadeInDown.duration(400)} 
+                style={[
+                  styles.iosGuideCard, 
+                  { 
+                    borderColor: isNebula ? 'rgba(140, 80, 255, 0.2)' : 'rgba(218, 165, 32, 0.25)',
+                    backgroundColor: isNebula ? 'rgba(12, 6, 22, 0.6)' : 'rgba(12, 9, 3, 0.6)'
+                  }
+                ]}
+              >
+                <Text style={[styles.iosGuideTitle, { color: isNebula ? '#c084fc' : '#ffd700' }]}>
+                  Install on iPhone / iPad 📱
+                </Text>
+                <Text style={[styles.iosGuideStep, { color: isNebula ? '#d8b4fe' : '#fef08a' }]}>
+                  1. Open this website in <Text style={{ fontWeight: '700' }}>Safari</Text>.
+                </Text>
+                <Text style={[styles.iosGuideStep, { color: isNebula ? '#d8b4fe' : '#fef08a' }]}>
+                  2. Tap the <Text style={{ fontWeight: '700' }}>Share</Text> button at the bottom of the screen.
+                </Text>
+                <Text style={[styles.iosGuideStep, { color: isNebula ? '#d8b4fe' : '#fef08a' }]}>
+                  3. Select <Text style={{ fontWeight: '700' }}>"Add to Home Screen"</Text> from the menu.
+                </Text>
+                <Text style={[styles.iosGuideDesc, { color: isNebula ? '#7c6a99' : '#7a6020' }]}>
+                  This adds a shortcut to your home screen that opens the app in premium full-screen mode!
+                </Text>
+              </Animated.View>
+            )}
           </View>
-        </View>
+        ) : null}
       </ScrollView>
       
       <PullAnimationOverlay active={pulling} color={rarityDef.glow} />
@@ -510,5 +574,37 @@ const styles = StyleSheet.create({
   storeButtonText: {
     color: '#fff',
     fontWeight: '700'
+  },
+  iosGuideCard: {
+    marginTop: 16,
+    width: '100%',
+    maxWidth: 360,
+    borderRadius: 16,
+    borderWidth: 1,
+    padding: 16,
+    alignItems: 'flex-start',
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 4 }
+  },
+  iosGuideTitle: {
+    fontSize: 14,
+    fontWeight: '700',
+    marginBottom: 8,
+    fontFamily: Platform.OS === 'web' ? 'Rajdhani' : 'System'
+  },
+  iosGuideStep: {
+    fontSize: 12,
+    marginBottom: 4,
+    lineHeight: 1.5,
+    fontFamily: Platform.OS === 'web' ? 'Space Grotesk' : 'System'
+  },
+  iosGuideDesc: {
+    fontSize: 11,
+    marginTop: 8,
+    fontStyle: 'italic',
+    lineHeight: 1.4,
+    fontFamily: Platform.OS === 'web' ? 'Space Grotesk' : 'System'
   }
 });
