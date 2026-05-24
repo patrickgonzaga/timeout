@@ -45,10 +45,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   ring: {
-    width: 320,
-    height: 320,
-    borderRadius: 180,
-    borderWidth: 2,
+    width: 200,
+    height: 200,
+    borderRadius: 100,
+    borderWidth: 0,
     position: 'absolute'
   },
   textBox: {
